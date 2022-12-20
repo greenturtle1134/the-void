@@ -3,10 +3,6 @@ body {
 	margin: 0;
 }
 
-/* NOTE: Caret with contenteditable div is finicky.
-With the div set to min width it doesn't appear at all before user types.
-With div set to 100% width it appears in extreme left before user types.
-Currently I have it set to min width, but I might be able to fix this later. */
 .textbox {
 	width: 100%;
 	text-align: center;
@@ -18,7 +14,7 @@ Currently I have it set to min width, but I might be able to fix this later. */
 	font-family: sans-serif;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%);	
+	transform: translate(-50%, -50%);
 }
 
 .unselectable {
