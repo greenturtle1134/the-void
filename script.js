@@ -1,4 +1,4 @@
-const EMPTY = " "; // NBSP
+const EMPTY = "​"; // Zero Width Space
 
 var FADE_TIME = 1000;
 var TIMEOUT_TIME = 60*1000;
@@ -37,6 +37,10 @@ function backgroundColor(t) {
 	return "hsl(" + h + ", 80%, 90%)";
 }
 
+function clean(string) {
+	return string.replace(EMPTY, "").trim();
+}
+
 function keyPress(event) {
 	lastPress = Date.now();
 	if (!hintHidden) {
@@ -51,13 +55,13 @@ function keyPress(event) {
 		clear(); // Maintain whitespace
 	}
 	if (isEmpty()) {
-		typeStart = new Date();
+		typeStart = Date.now();
 	}
 	else if (event.key == "Enter") {
 		event.preventDefault();
-		let written = entry.innerText;
+		let written = clean(entry.innerText);
 		
-        record(entry.innerText, typeStart, new Date(), false);
+        record(written, typeStart, Date.now(), false);
 		
 		fadeText.innerText = written;
 		fadeText.style.color = textColor(1);
@@ -79,7 +83,8 @@ function loop() {
 	if (!isEmpty()) {
 		let t2 = Date.now() - lastPress;
 		if (t2 > TIMEOUT_TIME) {
-			record(entry.innerText, typeStart, new Date(lastPress), true);
+			record(clean(entry.innerText), typeStart, lastPress, true);
+			entry.style.color = textColor(1);
 			clear();
 		}
 		else if (t2 > TIMEOUT_WARN_TIME) {
@@ -93,10 +98,32 @@ function loop() {
 	body.style.backgroundColor = backgroundColor(Date.now());
 }
 
-function record(x, start, end, unended) {
-	// Placeholder
-	console.log(x);
-	console.log(start, end, unended, end-start);
+var records = [];
+if (window.localStorage.getItem('records')) {
+	records = JSON.parse(window.localStorage.getItem('records'));
+}
+else {
+	save();
+}
+
+
+function save() {
+	window.localStorage.setItem('records', JSON.stringify(records));
+}
+
+class Record {
+	constructor (content, start, end, unended) {
+		this.content = content;
+		this.start = start;
+		this.end = end;
+		this.unended = unended;
+	}
+}
+
+function record(content, start, end, unended) {
+	records.push(new Record(content, start, end, unended));
+	console.log(records); // Debugging
+	save();
 }
 
 setInterval(loop, 0);
