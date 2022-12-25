@@ -1,14 +1,12 @@
-const EMPTY = "​"; // Zero Width Space
-
 var FADE_TIME = 1000;
 var TIMEOUT_TIME = 60*1000;
 var TIMEOUT_WARN_TIME = 30*1000;
 var COLOR_CYCLE_TIME = 30*1000;
-var LOOP_INT = 0;
 
 var body = document.getElementById("body");
 var fadeText = document.getElementById("fadetext");
 var entry = document.getElementById("entrytext");
+var recordTable = document.getElementById("recordTable");
 
 var fadeStart = 0;
 var typeStart = null;
@@ -17,14 +15,12 @@ var timeoutFading = false;
 
 var hintHidden = false;
 
-// Using zero-width whitespace as empty string so caret can be centered
-// Does require string compare to check for empty though...
 function isEmpty() {
-	return entry.innerText == EMPTY;
+	return entry.innerText == "\n";
 }
 
 function clear() {
-	entry.innerText = EMPTY;
+	entry.innerText = "\n";
 }
 
 // Could change to change text color
@@ -37,10 +33,6 @@ function backgroundColor(t) {
 	return "hsl(" + h + ", 80%, 90%)";
 }
 
-function clean(string) {
-	return string.replace(EMPTY, "").trim();
-}
-
 function keyPress(event) {
 	lastPress = Date.now();
 	if (!hintHidden) {
@@ -51,15 +43,15 @@ function keyPress(event) {
 		entry.style.color = "black";
 		timeoutFading = false;
 	}
-	if (entry.innerText.length == 0) {
-		clear(); // Maintain whitespace
-	}
 	if (isEmpty()) {
 		typeStart = Date.now();
+		if (event.key == "Enter") {
+			event.preventDefault();
+		}
 	}
 	else if (event.key == "Enter") {
 		event.preventDefault();
-		let written = clean(entry.innerText);
+		let written = entry.innerText.trim();
 		
         record(written, typeStart, Date.now(), false);
 		
@@ -83,7 +75,7 @@ function loop() {
 	if (!isEmpty()) {
 		let t2 = Date.now() - lastPress;
 		if (t2 > TIMEOUT_TIME) {
-			record(clean(entry.innerText), typeStart, lastPress, true);
+			record(entry.innerText.trim(), typeStart, lastPress, true);
 			entry.style.color = textColor(1);
 			clear();
 		}
@@ -101,6 +93,9 @@ function loop() {
 var records = [];
 if (window.localStorage.getItem('records')) {
 	records = JSON.parse(window.localStorage.getItem('records'));
+	for (r of records) {
+		toTable(r);
+	}
 }
 else {
 	save();
@@ -120,9 +115,23 @@ class Record {
 	}
 }
 
+function toTable(r) {
+	let tr = document.createElement("tr");
+	let td1 = document.createElement("td");
+	let td2 = document.createElement("td");
+	td1.innerText = new Date(r.start).toLocaleString();
+	td1.align = "right";
+	td2.innerText = r.content;
+	tr.appendChild(td1);
+	tr.appendChild(td2);
+	recordTable.appendChild(tr);
+}
+
 function record(content, start, end, unended) {
-	records.push(new Record(content, start, end, unended));
+	let r = new Record(content, start, end, unended);
+	records.push(r);
 	console.log(records); // Debugging
+	toTable(r);
 	save();
 }
 

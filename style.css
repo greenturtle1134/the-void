@@ -3,18 +3,24 @@ body {
 	margin: 0;
 }
 
+#backdrop {
+	height: 100%;
+	width: 100%;
+}
+
 .textbox {
 	width: 100%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	
 	text-align: center;
 	background: transparent;
 	border: none;
 	outline: none;
 	font-size: 10vh;
-	position: absolute;
 	font-family: sans-serif;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 }
 
 .unselectable {
@@ -28,4 +34,113 @@ body {
 
 #hint {
 	color: rgba(0,0,0,0.2);
+}
+
+#toolbar {
+	width: 100%;
+	height: 15%;
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translate(-50%, -100%);
+    transition: all 0.2s ease-in-out;
+	
+	display: flex;
+	justify-content: center;
+	align-items: end;
+}
+
+#toolbar .toolbar-item {
+	opacity:0;
+    transition: all 0.2s ease-in-out;
+}
+
+#toolbar:hover .toolbar-item {
+	opacity:1;
+}
+
+button.toolbar-item {
+	width: 9vh;
+	height: 9vh;
+	font-size: 5vh;
+	border-radius: 2.5vh;
+	border-width: 0.5vh;
+	border-style: solid;
+	border-color: transparent;
+	background: transparent;
+	margin: 1vh;
+	
+	color: rgba(0, 0, 0, 0.3);
+	cursor: pointer;
+}
+
+button.toolbar-item:hover {
+	border-color: rgba(0, 0, 0, 0.6);
+	color: rgba(0, 0, 0, 0.6);
+}
+
+button.toolbar-item:active {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Modal adapted from https://www.w3schools.com/ */
+.modal-bg {
+	z-index: 3;
+	display: none;
+	padding-top: 10vh;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0,0,0,0.4);
+}
+
+.modal-window {
+	margin: auto;
+	background-color: white;
+	position: relative;
+	padding: 5px;
+	border: solid black 5px;
+	border-radius: 15px;
+	width: 75%;
+}
+
+.modal-content {
+	max-height: 75vh;
+	overflow-y: scroll;
+}
+
+.close-button {
+	position: absolute;
+	right: 0;
+	top: 0;
+	border: none;
+	display: inline-block;
+	font-size: 24px;
+	padding: 6px 12px;
+	vertical-align: middle;
+	overflow: hidden;
+	text-decoration: none;
+	color: inherit;
+	background-color: transparent;
+	text-align: center;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.close-button:hover {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+#recordTable {
+	overflow-y: scroll;
+	border-collapse: collapse;
+}
+
+#recordTable td {
+	border: 1px solid;
+	font-family: sans-serif;
+	padding: 2px;
 }

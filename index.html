@@ -2,11 +2,27 @@
 <html>
 <head>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
 </head>
-<body id="body" onclick="entry.focus()" onkeypress="entry.focus()">
+<body id="body" onkeypress="entry.focus()">
+	<div id="backdrop" onclick="entry.focus()"></div>
 	<div id="hint" class="textbox unselectable">Type something...</div>
 	<div id="fadetext" class="textbox unselectable"></div>
-	<div id="entrytext" class="textbox" type="text" onkeypress="keyPress(event)" contenteditable>&ZeroWidthSpace;</div>
+	<div id="entrytext" class="textbox" type="text" onkeypress="keyPress(event)" contenteditable><br></div>
+	<div id="toolbar">
+		<button type="button" class="toolbar-item" onclick="document.getElementById('listModal').style.display='block'"><i class="bi bi-list-ul"></i></button>
+	</div>
+	<div id="listModal" class="modal-bg">
+		<div class="modal-window">
+			<div>
+				<span onclick="document.getElementById('listModal').style.display='none'" class="close-button">&times;</span>
+			</div>
+			<div class="modal-content">
+				<table id="recordTable"></table>
+			</div>
+			</table>
+		</div>
+	</div>
 	<script src="script.js"></script>
 </body>
 </html>
